@@ -1,37 +1,46 @@
-pipeline{
-    agent any 
-    stages{
-        stage("Code Clone"){
-            steps{
-                git url:"https://github.com/sarthujecrc/two-tier-flask-app.git",branch:"main"
+pipeline {
+    agent any
+
+    stages {
+
+        stage("Code") {
+            steps {
+                git url: "https://github.com/shubhamsheoran17/two-tier-flask-app.git",
+                    branch: "main"
             }
         }
-        stage("Build"){
-            steps{
-                sh 'docker build -t sarthu/flasksarthuapp .'
+
+        stage("Build") {
+            steps {
+                sh 'docker build -t sarthu/sarthaksinghal:latest .'
             }
         }
-        stage("Test"){
-            steps{
+
+        stage("Test") {
+            steps {
                 echo "test cases"
             }
         }
-        stage("Docker hub"){
-            steps{
+
+        stage("Docker Hub") {
+            steps {
                 withCredentials([usernamePassword(
-                    credentialsId:"dockerhubsarthak",
-                    usernameVariable:"dockerhubuser",
-                    passwordVariable:"dockerhubpassword"
-                    
-                    )]){
-                sh 'docker login -u $dockerhubuser -p $dockerhubpassword'
-                sh 'docker image tag  sarthu/flasksarthuapp $dockerhubuser/sarthaksinghal'
-                sh 'docker push   $dockerhubuser/sarthaksinghal '
+                    credentialsId: "HawkDockerHub",
+                    usernameVariable: "dockerhubuser",
+                    passwordVariable: "dockerhubpassword"
+                )]) {
+
+                    sh 'docker login -u "$dockerhubuser" -p "$dockerhubpassword"'
+
+                    sh 'docker image tag sarthu/sarthaksinghal:latest "$dockerhubuser/devilking:latest"'
+
+                    sh 'docker push "$dockerhubuser/devilking:latest"'
                 }
             }
         }
-        stage("Deploy"){
-            steps{
+
+        stage("Deploy") {
+            steps {
                 sh 'docker compose up -d'
             }
         }

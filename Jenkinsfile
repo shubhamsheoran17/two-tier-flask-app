@@ -25,16 +25,16 @@ pipeline {
         stage("Docker Hub") {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "RamDockerHub",
+                    credentialsId: "RadhaDockerHub",
                     usernameVariable: "dockerhubuser",
                     passwordVariable: "dockerhubpassword"
                 )]) {
 
                     sh 'docker login -u "$dockerhubuser" -p "$dockerhubpassword"'
 
-                    sh 'docker image tag sarthu/sarthaksinghal:latest "$dockerhubuser/deathking:latest"'
+                    sh 'docker image tag sarthu/sarthaksinghal:latest "$dockerhubuser/bharat:latest"'
 
-                    sh 'docker push "$dockerhubuser/deathking:latest"'
+                    sh 'docker push "$dockerhubuser/bharat:latest"'
                 }
             }
         }

@@ -1,5 +1,5 @@
 pipeline {
-   agent {label "dev"}
+    agent { label "dev" }
 
     stages {
 
@@ -43,6 +43,16 @@ pipeline {
             steps {
                 sh 'docker compose up -d'
             }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                to: "shubhamsheoran56@gmail.com",
+                subject: "CI/CD Pipeline",
+                body: "Pipeline runs successfully"
+            )
         }
     }
 }
